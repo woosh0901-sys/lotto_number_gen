@@ -1,0 +1,121 @@
+.item-grid-container {
+    background: rgba(10, 10, 15, 0.8);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(200, 155, 60, 0.2);
+}
+
+.filters {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(200, 155, 60, 0.3);
+    background: rgba(26, 26, 46, 0.8);
+    color: #e0e0e0;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #c89b3c;
+    box-shadow: 0 0 16px rgba(200, 155, 60, 0.2);
+}
+
+.search-input::placeholder {
+    color: #666;
+}
+
+.category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.category-btn {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(200, 155, 60, 0.3);
+    background: transparent;
+    color: #a0a0a0;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.category-btn:hover {
+    border-color: #c89b3c;
+    color: #c89b3c;
+}
+
+.category-btn.active {
+    background: linear-gradient(135deg, #c89b3c 0%, #785a28 100%);
+    color: #0a0a0f;
+    border-color: #c89b3c;
+    font-weight: 600;
+}
+
+.completed-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #a0a0a0;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.completed-toggle input {
+    accent-color: #0ac8b9;
+    width: 16px;
+    height: 16px;
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    gap: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.item-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.item-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.item-grid::-webkit-scrollbar-thumb {
+    background: #c89b3c;
+    border-radius: 3px;
+}
+
+.no-results {
+    text-align: center;
+    color: #666;
+    padding: 40px;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .item-grid {
+        grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+        max-height: 300px;
+    }
+
+    .category-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}
