@@ -1,13 +1,212 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lotto-gen</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="역대 로또 당첨번호 통계 분석 및 번호 추천 서비스">
+    <meta name="theme-color" content="#f59e0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="로또분석">
+    <title>🎰 로또 통계 분석기 - Lotto Analyzer</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles/main.css">
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('✅ Service Worker 등록 완료'))
+                    .catch(err => console.log('❌ Service Worker 등록 실패:', err));
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <button class="theme-toggle" id="themeToggle" title="테마 변경">🌙</button>
+            <h1>🎰 로또 통계 분석기</h1>
+            <p class="subtitle">역대 당첨번호 분석 & 통계 기반 추천</p>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-overview">
+            <div class="stat-card">
+                <span class="stat-value" id="totalDraws">-</span>
+                <span class="stat-label">총 회차</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="latestDraw">-</span>
+                <span class="stat-label">최신 회차</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="dataRange">-</span>
+                <span class="stat-label">데이터 기간</span>
+            </div>
+        </section>
+
+        <!-- Winning Probability -->
+        <section class="probability-section">
+            <h2>🎲 당첨 확률</h2>
+            <div class="probability-cards">
+                <div class="prob-card prob-1st">
+                    <div class="prob-rank">1등</div>
+                    <div class="prob-match">6개 일치</div>
+                    <div class="prob-odds">1 / 8,145,060</div>
+                    <div class="prob-visual">
+                        <div class="prob-bar" style="width: 0.00001%"></div>
+                    </div>
+                    <div class="prob-desc">약 814만분의 1</div>
+                </div>
+                <div class="prob-card prob-2nd">
+                    <div class="prob-rank">2등</div>
+                    <div class="prob-match">5개 + 보너스</div>
+                    <div class="prob-odds">1 / 1,357,510</div>
+                    <div class="prob-visual">
+                        <div class="prob-bar" style="width: 0.00006%"></div>
+                    </div>
+                    <div class="prob-desc">약 136만분의 1</div>
+                </div>
+                <div class="prob-card prob-3rd">
+                    <div class="prob-rank">3등</div>
+                    <div class="prob-match">5개 일치</div>
+                    <div class="prob-odds">1 / 35,724</div>
+                    <div class="prob-visual">
+                        <div class="prob-bar" style="width: 0.003%"></div>
+                    </div>
+                    <div class="prob-desc">약 3.6만분의 1</div>
+                </div>
+                <div class="prob-card prob-4th">
+                    <div class="prob-rank">4등</div>
+                    <div class="prob-match">4개 일치</div>
+                    <div class="prob-odds">1 / 733</div>
+                    <div class="prob-visual">
+                        <div class="prob-bar" style="width: 0.14%"></div>
+                    </div>
+                    <div class="prob-desc">약 733분의 1</div>
+                </div>
+                <div class="prob-card prob-5th">
+                    <div class="prob-rank">5등</div>
+                    <div class="prob-match">3개 일치</div>
+                    <div class="prob-odds">1 / 45</div>
+                    <div class="prob-visual">
+                        <div class="prob-bar" style="width: 2.2%"></div>
+                    </div>
+                    <div class="prob-desc">약 45분의 1</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Winning Numbers -->
+        <section class="recent-draws-section">
+            <h2>🏆 최근 당첨번호</h2>
+            <div class="recent-draws" id="recentDraws">
+                <!-- Recent draws will be rendered here -->
+            </div>
+        </section>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard">
+            <!-- Frequency Chart -->
+            <section class="card card-large">
+                <h2>📊 번호별 출현 빈도</h2>
+                <div class="chart-container">
+                    <canvas id="frequencyChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Odd/Even & High/Low -->
+            <section class="card">
+                <h2>⚖️ 홀짝 비율</h2>
+                <div class="chart-container chart-small">
+                    <canvas id="oddEvenChart"></canvas>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>📈 고저 비율</h2>
+                <div class="chart-container chart-small">
+                    <canvas id="highLowChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Range Distribution -->
+            <section class="card">
+                <h2>🎯 구간별 분포</h2>
+                <div class="chart-container chart-small">
+                    <canvas id="rangeChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Timeline Analysis -->
+            <section class="card">
+                <h2>📅 최근 트렌드</h2>
+                <div class="timeline-controls">
+                    <button class="btn active" data-weeks="4">최근 4주</button>
+                    <button class="btn" data-weeks="8">최근 8주</button>
+                    <button class="btn" data-weeks="12">최근 12주</button>
+                </div>
+                <div class="hot-numbers" id="hotNumbers">
+                    <!-- Hot numbers will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Cold Numbers -->
+            <section class="card">
+                <h2>❄️ 미출현 번호</h2>
+                <p class="card-desc">오랫동안 나오지 않은 번호</p>
+                <div class="cold-numbers" id="coldNumbers">
+                    <!-- Cold numbers will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Consecutive Patterns -->
+            <section class="card">
+                <h2>🔗 연속번호 패턴</h2>
+                <div class="pattern-stats" id="consecutivePatterns">
+                    <!-- Patterns will be rendered here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Recommendation Section -->
+        <section class="recommendation-section">
+            <h2>🎯 추천 번호</h2>
+            <div class="recommendation-tabs">
+                <button class="rec-btn active" data-type="frequency">빈도 기반</button>
+                <button class="rec-btn" data-type="balanced">밸런스 기반</button>
+                <button class="rec-btn" data-type="cold">미출현 포함</button>
+                <button class="rec-btn" data-type="random">완전 랜덤</button>
+            </div>
+            <div class="recommended-numbers" id="recommendedNumbers">
+                <!-- Recommended numbers will be rendered here -->
+            </div>
+            <button class="generate-btn" id="generateBtn">
+                🔄 새로운 번호 생성
+            </button>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>⚠️ 로또는 완전 랜덤 게임입니다. 이 분석은 참고용이며 당첨을 보장하지 않습니다.</p>
+            <p>© 2026 Lotto Analyzer | 데이터 출처: 동행복권</p>
+        </footer>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>
