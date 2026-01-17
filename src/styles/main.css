@@ -716,6 +716,156 @@ body {
     transform: translateY(0) scale(0.98);
 }
 
+/* ===== Store Finder Section ===== */
+.store-finder-section {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.store-finder-section h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.store-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.find-store-btn {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    margin-bottom: 1.5rem;
+}
+
+.find-store-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+}
+
+.find-store-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.store-search-form {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+    justify-content: center;
+}
+
+.address-input {
+    flex: 1;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid #cbd5e1;
+    border-radius: 30px;
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition);
+    font-family: 'Outfit', sans-serif;
+}
+
+.address-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="dark"] .address-input {
+    background: var(--bg-card-hover);
+    border-color: #475569;
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .address-input:focus {
+    border-color: #3b82f6;
+}
+
+.store-map {
+    width: 100%;
+    height: 350px;
+    border-radius: var(--radius);
+    background: var(--bg-card-hover);
+    margin-bottom: 1rem;
+    display: none;
+    overflow: hidden;
+}
+
+.store-map.active {
+    display: block;
+}
+
+.store-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.store-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: var(--radius);
+    border: 1px solid #93c5fd;
+    transition: var(--transition);
+}
+
+.store-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.store-icon {
+    font-size: 1.5rem;
+}
+
+.store-info {
+    flex: 1;
+}
+
+.store-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.store-address {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.store-distance {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2563eb;
+    white-space: nowrap;
+}
+
+[data-theme="dark"] .store-item {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%);
+    border-color: #3b82f6;
+}
+
 /* ===== Footer ===== */
 .footer {
     text-align: center;

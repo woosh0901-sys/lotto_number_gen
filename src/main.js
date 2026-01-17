@@ -396,4 +396,46 @@ function setupEventListeners() {
             }
         });
     }
+
+    // 복권 판매점 찾기 버튼
+    const findStoreBtn = document.getElementById('findStoreBtn');
+    if (findStoreBtn) {
+        findStoreBtn.addEventListener('click', findNearbyStores);
+    }
+
+    // 주소 입력창 엔터키 지원
+    const addressInput = document.getElementById('addressInput');
+    if (addressInput) {
+        addressInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                findNearbyStores();
+            }
+        });
+    }
 }
+
+// ===== 근처 복권 판매점 찾기 =====
+// ===== 복권 판매점 검색 (네이버 지도 연동) =====
+function findNearbyStores() {
+    const input = document.getElementById('addressInput');
+    const query = input.value.trim();
+
+    if (!query) {
+        alert('지역명을 입력해주세요! (예: 강남구, 역삼동)');
+        input.focus();
+        return;
+    }
+
+    // 네이버 지도 검색 URL 생성
+    const searchUrl = `https://map.naver.com/p/search/${encodeURIComponent(query + ' 복권 판매점')}`;
+
+    // 새 창으로 열기
+    window.open(searchUrl, '_blank');
+}
+
+// 지도 이동 함수 (전역)
+window.panToStore = function (lat, lng) {
+    if (storeMap) {
+        storeMap.panTo(new kakao.maps.LatLng(lat, lng));
+    }
+};
